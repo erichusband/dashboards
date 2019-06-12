@@ -1,0 +1,118 @@
+{
+  "private": true,
+  "name": "dashboards",
+  "version": "0.1.171",
+  "nr1": {
+    "org": "dataviz",
+    "sdkVersion": 2
+  },
+  "scripts": {
+    "start": "nr1-pkg serve",
+    "pkg": "nr1-pkg",
+    "prepush": "npm run test",
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "test": "jest",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -n changelog.config.js .",
+    "test:watch": "npm test -- --watch --onlyChanged",
+    "e2e-test": "nr1-e2e-test-proto test --framework=jasmine --waitforTimeout=15000",
+    "e2e-test:local": "nr1-e2e-test-proto test --framework=jasmine --waitforTimeout=15000 --packageModifier=local",
+    "e2e-test:local:debug": "DEBUG=true nr1-e2e-test-proto test --inspect --logLevel=debug --framework=jasmine --packageModifier=local",
+    "e2e-test:staging": "npm run e2e-test -- --platformEnv=staging",
+    "e2e-test:us-prod": "npm run e2e-test -- --platformEnv=us-prod",
+    "e2e-test:eu-prod": "npm run e2e-test -- --platformEnv=eu-prod",
+    "e2e-test:gc": "npm run e2e-test:staging -- --sauce --packageModifier=GC --reportToInsights",
+    "e2e-test-jenkins:staging": "npm run e2e-test:staging --",
+    "e2e-test-jenkins:us-prod": "npm run e2e-test:us-prod --",
+    "e2e-test-jenkins:eu-prod": "npm run e2e-test:eu-prod --",
+    "lint:js": "eslint --ignore-pattern '**/node_modules/**' --fix .",
+    "lint:css": "stylelint **/*.scss --syntax scss",
+    "lint": "npm-run-all --parallel lint:css lint:js",
+    "format:js:eslint:staged": "eslint --ext .js --ext .jsx --fix",
+    "format:js:eslint": "eslint --ext .js --ext .jsx './' --fix",
+    "format:js:prettier:staged": "prettier --write",
+    "format:js:prettier": "prettier --write './**/*.js'",
+    "format:css": "npm run lint:css --fix",
+    "format:css:staged": "stylelint --fix --syntax scss",
+    "format": "npm-run-all format:js:prettier format:js:eslint format:css",
+    "dredd": "nr1-dredd"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "**/*.scss": [
+      "npm run format:css:staged",
+      "git add"
+    ],
+    "**/*.{js,jsx}": [
+      "npm run format:js:prettier:staged",
+      "npm run format:js:eslint:staged",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@source.datanerd.us:dataviz/dashboards.git"
+  },
+  "bugs": {
+    "email": "dataviz-engineers@newrelic.com"
+  },
+  "author": "NEW RELIC",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@commitlint/cli": "^7.2.1",
+    "@commitlint/config-angular": "^7.1.2",
+    "@datanerd/babel-preset-nr1package": "^1.0.3",
+    "@datanerd/iconography": "^2.1.0",
+    "@datanerd/meatballs-inventory-ui": "^5.1.1",
+    "@datanerd/mosaic": "^16.44.2",
+    "@datanerd/nerd-graph-client": "^7.2.1",
+    "@datanerd/nr-filter": "^4.21.0",
+    "@datanerd/nr-ui": "^10.2.0",
+    "@datanerd/nr-ui-legacy": "^9.16.0",
+    "@datanerd/nr1-e2e-test-proto": "^3.2.0",
+    "@datanerd/pin-to-insights-component": "^3.1.11",
+    "@wdio/jasmine-framework": "^5.7.2",
+    "chai": "^4.2.0",
+    "classnames": "^2.2.6",
+    "d3-time-format": "^2.1.3",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "fast-memoize": "^2.5.1",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.debounce": "^4.0.8",
+    "lodash.get": "^4.4.2",
+    "lodash.throttle": "^4.1.1",
+    "md5": "^2.2.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "styled-components": "^4.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/register": "^7.0.0",
+    "@datanerd/eslint-config-nr1package": "^1.0.2",
+    "@datanerd/nr1-dredd": "^2.7.1",
+    "@datanerd/nr1-package": "^12.8.0",
+    "@datanerd/project-linker": "^1.0.0",
+    "conventional-changelog-cli": "^2.0.12",
+    "eslint": "^4.19.1",
+    "eslint-plugin-jest": "^21.27.2",
+    "eslint-plugin-react": "^7.12.3",
+    "fibers": "^3.1.1",
+    "husky": "^1.3.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.0.0",
+    "lint-staged": "^7.3.0",
+    "npm-run-all": "^4.1.5",
+    "@octokit/rest": "^16.27.0",
+    "prettier": "^1.16.4",
+    "stylelint": "^9.9.0",
+    "stylelint-config-standard": "^18.2.0"
+  }
+}
